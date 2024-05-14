@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Form\ArticleType;
+use App\Entity\Category;
+use App\Form\CategoryType;
 class IndexController extends AbstractController
 {
    #[Route('/',name:'article_list')]
@@ -97,6 +99,21 @@ public function delete(PersistenceManagerRegistry $managerRegistry, Request $req
     return $this->redirectToRoute('article_list');
 }
 
+#[Route('/category/newCat', name: 'new_category', methods:['GET','POST'])]
+public function newCategory(PersistenceManagerRegistry $managerRegistry,Request $request) {
+  $category = new Category();
+  $form = $this->createForm(CategoryType::class,$category);
+  $form->handleRequest($request);
+  if($form->isSubmitted() && $form->isValid()) {
+    $category = $form->getData();
+    $entityManager=$managerRegistry->getManager();
+    $entityManager->persist($category);
+    $entityManager->flush();
+    return $this->redirectToRoute('article_list');
+  }
+  return $this->render('catego/newCategory.html.twig',['form'=> $form->createView()]);
+
+}
 
 
    

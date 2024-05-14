@@ -7,6 +7,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use App\Entity\Category; 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
 class ArticleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -14,6 +17,9 @@ class ArticleType extends AbstractType
         $builder
             ->add('Nom')
             ->add('Prix')
+            ->add('category',EntityType::class,['class' => Category::class, 
+                                                'choice_label' => 'titre', 
+                                                'label' => 'Catégorie'])
         ;
     }
 
